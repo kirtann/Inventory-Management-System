@@ -1,5 +1,3 @@
-package JavaMiniProject;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,28 +16,28 @@ class Inventry_Login {
         Font plan = new Font("Serif",0,20);
 
 
-        JFrame lf = new JFrame("SingIn");
+        JFrame lf = new JFrame("SIGNIN");
         lf.setExtendedState(JFrame.MAXIMIZED_BOTH);
         lf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         lf.setLocationRelativeTo(null);
         lf.setLayout(null);
 
-        ImageIcon ic2 = new ImageIcon("E:\\short term corse on java\\Desktop_Application_In_Java\\src\\Final\\lpu.png");
+        ImageIcon ic2 = new ImageIcon("lpu.png");
         lf.setIconImage(ic2.getImage());
 
-        ImageIcon bg = new ImageIcon("E:\\short term corse on java\\Desktop_Application_In_Java\\src\\Final\\login.png");
+        ImageIcon bg = new ImageIcon("login.png");
         JLabel l = new JLabel(bg);
         lf.setContentPane(l);
 
         JLabel header = new JLabel("Inventory Management System",JLabel.CENTER);
         header.setFont(bold);
         lf.add(header);
-        header.setBounds(445,10,1080,50);
+        header.setBounds(270,10,1080,50);
 
         JPanel p = new JPanel();
         p.setLayout(null);
         p.setBackground(new Color(86, 108, 211));
-        lf.add(p); p.setBounds(200,350,400,500);
+        lf.add(p); p.setBounds(70,110,400,500);
 
         JLabel head = new JLabel("LOGIN",JLabel.CENTER);
         head.setFont(bold);
@@ -49,7 +47,7 @@ class Inventry_Login {
 
 
         JTextField uid = new JTextField("UID*"); uid.setFont(plan);
-        JPasswordField pass = new JPasswordField("PASSWORD*"); pass.setFont(plan);
+        JPasswordField pass = new JPasswordField("PASSWORD*"); pass.setFont(plan);pass.setEchoChar((char)0);
         JButton submit = new JButton("SIGNIN"); submit.setFont(plan); submit.setBackground(new Color(247,183,93));
         JButton register = new JButton("SIGNUP"); register.setFont(plan);register.setBackground(new Color(247,183,93));
 
@@ -60,7 +58,7 @@ class Inventry_Login {
         register.setBounds(220,375,125,40);
 
         try{
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/myshop", "root", "12102325");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/imsdb", "root", "database");
         }
         catch(Exception ex) { System.out.println(ex); }
 
@@ -71,7 +69,7 @@ class Inventry_Login {
                 if(ae.getSource()==submit)
                 {
                     String user = uid.getText();
-                    String pwd = pass.getText();
+                    String pwd = new String(pass.getPassword());
                     try{
 
                         PreparedStatement ps = con.prepareStatement("select * from user where uid = ?");
@@ -83,11 +81,11 @@ class Inventry_Login {
 
                         if(rs.next())
                         {
-                            String pass = rs.getString("password");
+                            String pass = rs.getString(3);
                             if(pwd.equals(pass))
                             {
-                                lf.setVisible(false);
-                                new Home_Page(Integer.parseInt(uid.getText()),rs.getString(3));
+                                lf.dispose();
+                                new Home_Page(Integer.parseInt(uid.getText()),rs.getString(2));
                             }
                             else
                             {
@@ -118,12 +116,27 @@ class Inventry_Login {
                 }
                 if(e.getSource()==pass)
                 {
+                    pass.setEchoChar('*');
                     pass.setText(null);
                 }
             }
 
             @Override
-            public void focusLost(FocusEvent e) {}
+            public void focusLost(FocusEvent e) {
+                if(e.getSource()==uid)
+                {
+                    if(uid.getText().equals(""))
+                        uid.setText("UID*");
+                }
+                if(e.getSource()==pass)
+                {
+                    if(pass.getPassword().length==0)
+                    {
+                        pass.setEchoChar((char)0);
+                        pass.setText("Password*");
+                    }
+                }
+            }
         }
         MyListener ml = new MyListener();
         submit.addActionListener(ml);
