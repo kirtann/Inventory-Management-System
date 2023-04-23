@@ -1,7 +1,7 @@
-package JavaMiniProject;
-
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
@@ -13,11 +13,11 @@ public class Home_Page {
     static int columncount;
     static  DefaultTableModel tableModel;
     public static void main(String[] args) throws SQLException {
-        new Home_Page(0,"");
+        new Home_Page(12115299,"Kirtan");
     }
     Home_Page(int uid,String n) throws SQLException {
         try{
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/myshop", "root", "database");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/imsdb", "root", "database");
         }
         catch(Exception ex) { System.out.println(ex); }
 
@@ -32,20 +32,20 @@ public class Home_Page {
         hf.setLocationRelativeTo(null);
         hf.getContentPane().setBackground(new Color(247,183,93));
 
-        ImageIcon ic2 = new ImageIcon("E:\\short term corse on java\\Desktop_Application_In_Java\\src\\Final\\lpu.png");
+        ImageIcon ic2 = new ImageIcon("lpu.png");
         hf.setIconImage(ic2.getImage());
         hf.setLayout(null);
 
         JLabel header = new JLabel("Inventory Management System",JLabel.CENTER);
         header.setFont(bold);
         hf.add(header);
-        header.setBounds(445,10,1080,50);
+        header.setBounds(310,10,1080,50);
 
         JPanel p1 = new JPanel();
         p1.setLayout(null);
         p1.setBackground(new Color(33,41,52));
         hf.add(p1);
-        p1.setBounds(0,0,300,1080);
+        p1.setBounds(0,0,270,1080);
 
         JLabel hv = new JLabel("Welcome "+n,JLabel.CENTER); hv.setForeground(Color.WHITE);
         JLabel sv = new JLabel("Stock Value: 0.00Rs"); sv.setForeground(Color.WHITE);
@@ -67,39 +67,37 @@ public class Home_Page {
         JButton add = new JButton("ADD ITEM");add.setFont(plan);add.setForeground(new Color(247,183,93));
         add.setBackground(new Color(33,41,52));
         hf.add(add);
-        add.setBounds(540,200,200,50);
+        add.setBounds(320,140,200,50);
 
         JButton del = new JButton("DELETE ITEM");del.setFont(plan);del.setForeground(new Color(247,183,93));
         del.setBackground(new Color(33,41,52));
         hf.add(del);
-        del.setBounds(840,200,200,50);
+        del.setBounds(590,140,200,50);
 
         JButton ser = new JButton("SEARCH ITEM");ser.setFont(plan);ser.setForeground(new Color(247,183,93));
         ser.setBackground(new Color(33,41,52));
         hf.add(ser);
-        ser.setBounds(1140,200,200,50);
+        ser.setBounds(860,140,200,50);
 
         JButton up = new JButton("UPDATE ITEM");up.setFont(plan);up.setForeground(new Color(247,183,93));
         up.setBackground(new Color(33,41,52));
         hf.add(up);
-        up.setBounds(1440,200,200,50);
+        up.setBounds(1130,140,200,50);
 
         JButton rf = new JButton("REFRESH");rf.setFont(plan);rf.setForeground(new Color(247,183,93));
         rf.setBackground(new Color(33,41,52));
         p1.add(rf);
-        rf.setBounds(0,900,300,50);
+        rf.setBounds(0,600,300,50);
 
         JPanel tp = new JPanel();
         tp.setLayout(new BorderLayout());
         JTable table;
 
-        int stovkvalue = 0;
-        int lowstock=0;
-        int totalstock =0;
 
+        String tablename = "UIT"+uid;
         try
         {
-            String query = "SELECT * FROM item";
+            String query = "SELECT * FROM "+tablename;
             Statement smt = con.createStatement();
             ResultSet rs = smt.executeQuery(query);
             tableModel = new DefaultTableModel();
@@ -118,7 +116,21 @@ public class Home_Page {
                 tableModel.addRow(row);
             }
             table = new JTable(tableModel);
-            table.setFont(plan);
+            table.setFont(new Font("Serif",Font.BOLD,18));
+
+            DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+            centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+            centerRenderer.setFont(new Font("Arial", Font.PLAIN, 16));
+            table.setDefaultRenderer(Object.class, centerRenderer);
+
+            DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+            headerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+            headerRenderer.setFont(new Font("Arial", Font.BOLD, 18));
+            TableColumnModel columnModel = table.getColumnModel();
+            for (int i = 0; i < columnModel.getColumnCount(); i++) {
+                columnModel.getColumn(i).setHeaderRenderer(headerRenderer);
+            }
+
             JScrollPane scrollPane = new JScrollPane(table);
             tp.add(scrollPane);
             rs.close();
@@ -128,38 +140,32 @@ public class Home_Page {
         {
             System.out.println(e);
         }
+
         hf.add(tp);
-        tp.setBounds(500,300,1200,600);
+        tp.setBounds(300,250,1050,400);
         class MyListener implements ActionListener {
             public void actionPerformed(ActionEvent ae) {
-                try {
 
-                    PreparedStatement ps = con.prepareStatement("select * from item");
-                    ResultSet rs = ps.executeQuery();
-                    String msg = null;
-                } catch (Exception exc) {
-                    System.out.println(exc);
-                }
                 if(ae.getSource()==add)
                 {
-                    new Add();
+                    new Add(uid);
                 }
                 if(ae.getSource()==del)
                 {
-                    new Delete();
+                    new Delete(uid);
                 }
                 if(ae.getSource()==up)
                 {
-
+                    new Update();
                 }
                 if(ae.getSource()==ser)
                 {
-
+                    new Search(uid);
                 }
                 if(ae.getSource()==rf)
                 {
                     try{
-                        String query = "SELECT * FROM item";
+                        String query = "SELECT * FROM "+tablename;
                         Statement smt = con.createStatement();
                         ResultSet rs = smt.executeQuery(query);
                         tableModel.setRowCount(0);
@@ -172,6 +178,39 @@ public class Home_Page {
                             }
                             tableModel.addRow(row);
                         }
+                    }
+                    catch (Exception e)
+                    {
+                        System.out.println(e);
+                    }
+                    try
+                    {
+                        PreparedStatement ps1 = con.prepareStatement("select PURCHASE_PRICE from "+tablename);
+                        ResultSet rs1 = ps1.executeQuery();
+
+                        int stock = 0;
+                        while(rs1.next())
+                        {
+                            stock += Integer.parseInt(rs1.getString(1));
+                        }
+                        sv.setText("Stock Value: "+stock+"Rs");
+
+                        PreparedStatement ps2 = con.prepareStatement("Select STOCK, MIN_STOCK from "+tablename);
+                        ResultSet rs2 = ps2.executeQuery();
+
+                        int minstock = 0;
+                        int totals =0;
+                        while(rs2.next())
+                        {
+                            if(rs2.getInt(1)<rs2.getInt(2))
+                                minstock++;
+                            totals += rs2.getInt(1);
+                        }
+                        lv.setText("Low Stocks: "+minstock);
+                        tv.setText("Total Stock: "+totals);
+
+
+
                     }
                     catch (Exception e)
                     {
