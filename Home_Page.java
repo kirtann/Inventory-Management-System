@@ -13,7 +13,7 @@ public class Home_Page {
     static int columncount;
     static  DefaultTableModel tableModel;
     public static void main(String[] args) throws SQLException {
-        new Home_Page(12115299,"Kirtan");
+        new Home_Page(11111111,"USER");
     }
     Home_Page(int uid,String n) throws SQLException {
         try{
