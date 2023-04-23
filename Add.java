@@ -1,5 +1,3 @@
-package JavaMiniProject;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,7 +7,7 @@ class Add {
      static Connection con;
 
 
-    public static void add_() {
+    public static void add_(int uid) {
         JTextField name;
         JTextField hsn;
         JTextField cat;
@@ -21,11 +19,11 @@ class Add {
         JButton save;
         JButton saven;
         try{
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/myshop", "root", "12102325");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/imsdb", "root", "database");
         }
         catch(Exception ex) { System.out.println(ex); }
         Font bold = new Font("Serif",1,35);
-        Font itelic = new Font("Serif",2,30);
+       
         Font plan = new Font("Serif",0,25);
 
         JFrame af = new JFrame("ADD ITEM");
@@ -35,7 +33,7 @@ class Add {
         af.setLocationRelativeTo(null);
         af.setLayout(null);
 
-        ImageIcon ic2 = new ImageIcon("E:\\short term corse on java\\Desktop_Application_In_Java\\src\\Final\\lpu.png");
+        ImageIcon ic2 = new ImageIcon("lpu.png");
         af.setIconImage(ic2.getImage());
 
 
@@ -113,11 +111,12 @@ class Add {
                 String c6 = cat.getText();
                 String c7 = min.getText();
                 String c8 = loc.getText();
+                String tablename = "UIT"+uid;
                 if(ae.getSource()==save)
                 {
                     try
                     {
-                        PreparedStatement ps = con.prepareStatement("insert into item values(null,?,?,?,?,?,?,?,?)");
+                        PreparedStatement ps = con.prepareStatement("insert into "+tablename+" values(null,?,?,?,?,?,?,?,?)");
 
 
                         ps.setString(1,c1);
@@ -126,14 +125,15 @@ class Add {
                         ps.setString(4,c4);
                         ps.setString(5,c5);
                         ps.setString(6,c6);
-                        ps.setString(7,c7);
-                        ps.setString(8,c8);
+                        ps.setString(8,c7);
+                        ps.setString(7,c8);
 
                         int row = ps.executeUpdate();
                         if(row>0)
                         {
                             System.out.println("added");
                             JOptionPane.showMessageDialog(af,"Item Added");
+                            af.dispose();
                         }
 
                     }
@@ -146,7 +146,8 @@ class Add {
                 {
                     try
                     {
-                        PreparedStatement ps = con.prepareStatement("insert into item values(null,?,?,?,?,?,?,?,?)");
+                        PreparedStatement ps = con.prepareStatement("insert into "+tablename+" values(null,?,?,?,?,?,?,?,?)");
+
 
                         ps.setString(1,c1);
                         ps.setString(2,c2);
@@ -154,13 +155,12 @@ class Add {
                         ps.setString(4,c4);
                         ps.setString(5,c5);
                         ps.setString(6,c6);
-                        ps.setString(7,c7);
-                        ps.setString(8,c8);
+                        ps.setString(8,c7);
+                        ps.setString(7,c8);
 
                         int row = ps.executeUpdate();
                         if(row>0)
                         {
-                            System.out.println("added");
                             JOptionPane.showMessageDialog(af,"Item Added");
                             name.setText("Item Name*");
                             hsn.setText("Item HSN*");
@@ -281,8 +281,8 @@ class Add {
 
         af.setVisible(true);
     }
-    Add()
+    Add(int uid)
     {
-       add_();
+       add_(uid);
     }
 }
