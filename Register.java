@@ -1,5 +1,3 @@
-package JavaMiniProject;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,9 +7,9 @@ import java.awt.event.FocusListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
-public class Register {
+
+class Register {
 
     public static void main(String[] args) {
         new Register();
@@ -33,23 +31,23 @@ public class Register {
         lf.setBackground(new Color(223,223,223));
         lf.setLayout(null);
 
-        ImageIcon ic2 = new ImageIcon("E:\\short term corse on java\\Desktop_Application_In_Java\\src\\Final\\lpu.png");
+        ImageIcon ic2 = new ImageIcon("lpu.png");
         lf.setIconImage(ic2.getImage());
 
-        ImageIcon bg = new ImageIcon("E:\\short term corse on java\\Desktop_Application_In_Java\\src\\Final\\register.png");
+        ImageIcon bg = new ImageIcon("register.png");
         JLabel l = new JLabel(bg);
         lf.setContentPane(l);
 
         JLabel header = new JLabel("Inventory Management System",JLabel.CENTER);
         header.setFont(bold);
         lf.add(header);
-        header.setBounds(445,10,1080,50);
+        header.setBounds(270,10,1080,50);
 
         JPanel p = new JPanel();
         p.setLayout(null);
         p.setOpaque(false);
         //p.setBackground(new Color(86, 108, 211));
-        lf.add(p); p.setBounds(30,350,400,500);
+        lf.add(p); p.setBounds(0,160,300,500);
 
         JLabel head = new JLabel("REGISTER",JLabel.CENTER);
         head.setFont(bold);
@@ -70,7 +68,7 @@ public class Register {
         submit.setBounds(140,375,125,50);
 
         try{
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/imsdb", "root", "12102325");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/imsdb", "root", "database");
         }
         catch(Exception ex) { System.out.println(ex); }
 
@@ -78,41 +76,45 @@ public class Register {
         {
             public void actionPerformed(ActionEvent ae)
             {
-                String user = uid.getText();
-                char[] pwd1 = pass.getPassword();
-                String pwd2 = new String(pwd1);
-                String na = name.getText();
-                try{
-
-                    PreparedStatement ps = con.prepareStatement("");
-
-
-                    ps.setString(1, user);
-                    ResultSet rs = ps.executeQuery();
-                    String msg = null;
-
-                    if(rs.next())
+                int choice = JOptionPane.showConfirmDialog(lf,"Do you want to confirm your registration?","Confirmation",JOptionPane.YES_NO_OPTION);
+                if(choice == JOptionPane.YES_OPTION)
+                {
+                    String user = uid.getText();
+                    String pwd = new String(pass.getPassword());
+                    String na = name.getText();
+                    if(!(user.equals("") || user.equals("UID*")) && !(pwd.equals("") || pwd.equals("Password*")) &&  !(na.equals("") || na.equals("Name*")))
                     {
-                        String pass = rs.getString("password");
-                        if(pwd2.equals(pass))
+                        try
                         {
-                            lf.setVisible(false);
-                            new Home_Page(Integer.parseInt(uid.getText()),rs.getString(3));
+
+                            PreparedStatement insert = con.prepareStatement("insert into user values (?,?,?)");
+                            PreparedStatement createtb = con.prepareStatement("CREATE TABLE IF NOT EXISTS UIT" +user +
+                                    " (ITEM_ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
+                                    " ITEM_NAME VARCHAR(30), HSN VARCHAR(10), SALE_PRICE INT, " +
+                                    " PURCHASE_PRICE INT, STOCK INT, CATEGORY VARCHAR(20), " +
+                                    " LOCATION VARCHAR(10),MIN_STOCK INT) AUTO_INCREMENT = 100");
+                            insert.setString(1,user);
+                            insert.setString(2,na);
+                            insert.setString(3,pwd);
+
+                            int row1 = insert.executeUpdate();
+                            if(row1>0)
+                            {
+                                System.out.print("Updated");
+                            }
+                            createtb.execute();
+                            {
+                                JOptionPane.showMessageDialog(lf,"Registration Confirmed\nRemember you UID and Password\nThank-you");
+                                lf.dispose();
+                            }
                         }
-                        else
+                        catch(Exception e)
                         {
-                            msg = "Incorrect Password";
-                            JOptionPane.showMessageDialog(lf, msg);
+                            System.out.println(e);
                         }
                     }
-                    else
-                    {
-                        msg = "User ID does not Exist";
-                        JOptionPane.showMessageDialog(lf, msg);
-                    }
+                }
 
-
-                } catch(Exception exc) { System.out.println(exc);}
             }
 
             @Override
