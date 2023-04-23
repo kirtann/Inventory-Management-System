@@ -1,4 +1,9 @@
-package JavaMiniProject;
-
-public class Update {
+class Update {
+    
+    Update()
+    {
+        System.out.print(
+            "Work In progress"
+            );
+    }
 }
