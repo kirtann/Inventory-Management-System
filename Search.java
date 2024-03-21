@@ -7,13 +7,13 @@ import java.sql.*;
 class Search {
     static Connection con;
     public static void main(String[] args) {
-        new Search(12102325);
+        new Search(3);
     }
     Search(int uid)
     {
 
         try{
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/imsdb", "root", "database");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/inventory", "root", "abhi1210@");
         }
         catch(Exception ex) { System.out.println(ex); }
         Font bold = new Font("Serif",1,35);
@@ -22,22 +22,22 @@ class Search {
 
         JFrame df = new JFrame("SEARCH ITEM");
         df.setSize(600,400);
-        df.getContentPane().setBackground(new Color(86, 108, 211));
+        df.getContentPane().setBackground(new Color(0, 153, 153));
         df.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         df.setLocationRelativeTo(null);
         df.setLayout(null);
 
-        ImageIcon ic2 = new ImageIcon("lpu.png");
-        df.setIconImage(ic2.getImage());
 
-
-        JLabel head = new JLabel("SEARCH ITEM",JLabel.CENTER);
+        JLabel head = new JLabel("Search Item",JLabel.CENTER);
         head.setFont(bold);
 
         JTextField id = new JTextField("Item Code*");
         id.setFont(plan);
 
-        JLabel name = new JLabel("Name @");name.setBackground(new Color(247,183,93));name.setOpaque(true);
+        JLabel name = new JLabel("Name @");
+        name.setBackground(new Color(247,183,93));
+//        name.setBackground(Color.white);
+        name.setOpaque(true);
         JLabel stock = new JLabel("Stock @");stock.setBackground(new Color(247,183,93));stock.setOpaque(true);
         JLabel sp = new JLabel("Sale @");sp.setBackground(new Color(247,183,93));sp.setOpaque(true);
         JLabel cp = new JLabel("Purchase @");cp.setBackground(new Color(247,183,93));cp.setOpaque(true);

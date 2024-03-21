@@ -13,7 +13,7 @@ class Delete {
     {
 
         try{
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/imsdb", "root", "database");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Inventory", "root", "abhi1210@");
         }
         catch(Exception ex) { System.out.println(ex); }
         Font bold = new Font("Serif",1,35);
@@ -21,13 +21,11 @@ class Delete {
 
         JFrame df = new JFrame("DELETE ITEM");
         df.setSize(400,400);
-        df.getContentPane().setBackground(new Color(86, 108, 211));
+        df.getContentPane().setBackground(new Color(0, 153, 153));
         df.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         df.setLocationRelativeTo(null);
         df.setLayout(null);
 
-        ImageIcon ic2 = new ImageIcon("lpu.png");
-        df.setIconImage(ic2.getImage());
 
 
         JLabel head = new JLabel("Delete Item",JLabel.CENTER);
@@ -58,6 +56,9 @@ class Delete {
                     if(n>0) {
                         System.out.println("Deleted");
                         JOptionPane.showMessageDialog(df, "Item Deleted Successfully! ");
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(df, "Item is Not Present!!");
                     }
                 } catch (Exception exc) {
                     System.out.println(exc);

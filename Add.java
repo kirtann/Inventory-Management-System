@@ -19,7 +19,7 @@ class Add {
         JButton save;
         JButton saven;
         try{
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/imsdb", "root", "database");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Inventory", "root", "abhi1210@");
         }
         catch(Exception ex) { System.out.println(ex); }
         Font bold = new Font("Serif",1,35);
@@ -28,14 +28,10 @@ class Add {
 
         JFrame af = new JFrame("ADD ITEM");
         af.setSize(1000,500);
-        af.getContentPane().setBackground(new Color(86, 108, 211));
+        af.getContentPane().setBackground(new Color(0, 153, 153));
         af.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         af.setLocationRelativeTo(null);
         af.setLayout(null);
-
-        ImageIcon ic2 = new ImageIcon("lpu.png");
-        af.setIconImage(ic2.getImage());
-
 
         JLabel head = new JLabel("Add Item",JLabel.CENTER);
         head.setFont(bold);
@@ -234,16 +230,16 @@ class Add {
                         hsn.setText("HSN*");
                     }
                 }
-                if(e.getSource().equals(""))
+                if(e.getSource()==loc)
                 {
-                    if(loc.getText()=="")
+                    if(loc.getText().equals(""))
                     {
                         loc.setText("Location*");
                     }
                 }
-                if(e.getSource().equals(""))
+                if(e.getSource()==min)
                 {
-                    if(min.getText()=="")
+                    if(min.getText().equals(""))
                     {
                         min.setText("Min Quantity*");
                     }
